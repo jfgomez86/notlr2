@@ -1,0 +1,25 @@
+!!! 5
+html(lang="en", class="no-js")
+  head
+    meta(charset="utf-8")
+    meta(name="description", content= "Description")
+    meta(name="author", content= "Author")
+    title= title
+    link(rel="shortcut icon", href="/favicon.ico")
+    link(rel="stylesheet", href="/css/style.css")
+
+  body
+    #container
+      header
+        | Notes
+
+    #main!=body
+
+    footer
+      | Me
+
+    script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js")
+    script(src="/js/socket.io.js")
+    script(src="/js/plugins.js?v=1")
+    script(src="/js/script.js?v=1")
+
