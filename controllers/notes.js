@@ -12,6 +12,8 @@ Notes.configure(function(){
   Notes.set("view options", {
     layout: getLayout()
   });
+  Notes.use(express.bodyDecoder());
+  Notes.use(express.methodOverride());
   Notes.use(Notes.router);
   Notes.dynamicHelpers({
   });
@@ -35,6 +37,32 @@ Notes.get("/", function (req, res) {
         notes: notes
       }
     });
+  });
+});
+
+Notes.post("/", function (req, res) {
+  var note = new Note(req.param("note"));
+  if (note.valid()) {
+    note.save(function () {
+      res.send("ok");
+    });
+  } else {
+    res.headers["Content-Type"] = "application/json";
+    res.send(JSON.stringify({errors: note.errors}), 422);
+  }
+});
+
+Notes.del("/:id", function (req, res) {
+  Note.findById(req.param("id"), function (note) {
+    if (!note) {
+      res.headers["Content-Type"] = "application/json";
+      res.send(JSON.stringify({errors: "couldn't delete note"}), 422);
+    } else {
+      note.remove(function () {
+        res.send("ok");
+        res.end();
+      });
+    }
   });
 });
 
