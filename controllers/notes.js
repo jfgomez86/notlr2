@@ -66,4 +66,22 @@ Notes.del("/:id", function (req, res) {
   });
 });
 
+Notes.put("/:id", function (req, res) {
+  Note.findById(req.param("id"), function (note) {
+    if (!note) {
+      res.headers["Content-Type"] = "application/json";
+      res.send(JSON.stringify({errors: "couldn't update note"}), 422);
+    } else {
+      (function (attr) {
+        if (req.param("note") && req.param("note").hasOwnProperty(attr)) {
+          note[attr] = req.param("note")[attr];
+        }
+        return arguments.callee;
+      })("title")("content");
+      note.save(function () {
+        res.send("ok");
+      });
+    }
+  });
+});
 // vim: set foldmethod=marker:

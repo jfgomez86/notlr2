@@ -63,6 +63,14 @@
     });
   };
 
+  Note.update = function (id, attrs) {
+    attrs = {note: attrs, "_method": "put"};
+    $.post("/notes/" + id, attrs, function (data, textStatus, xhr) {
+      if (/^ok$/.test(data)) console.log(data);
+      else console.log(data, textStatus, xhr);
+    });
+  };
+
 })(window.jQuery);
 
 
