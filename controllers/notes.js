@@ -44,7 +44,8 @@ Notes.post("/", function (req, res) {
   var note = new Note(req.param("note"));
   if (note.valid()) {
     note.save(function () {
-      res.send("ok");
+      res.headers["Content-Type"] = "application/json";
+      res.send(JSON.stringify({id: note._id}));
     });
   } else {
     res.headers["Content-Type"] = "application/json";
