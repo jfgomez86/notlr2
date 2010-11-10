@@ -1,8 +1,9 @@
 - if (notes.length > 0) {
-  ul
+  ul#notes
     - each note in notes
       li.note(id: "note_" + JSON.parse(JSON.stringify(note["_id"])))
-        h3.title=note.title
-        p.content=note.content
-        a.delete(href: "javascript:void(0)") Delete
+        h3.title(contenteditable: "true")=note.title
+        section.content(contenteditable: "true")=note.content
+        section.actions
+          a.delete(href: "javascript:void(0)") Delete
 - }
