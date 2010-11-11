@@ -7,7 +7,8 @@ nav.menu
 ul#notes
   - if (notes.length > 0) {
     - each note in notes
-      li.note(id: "note_" + JSON.parse(JSON.stringify(note["_id"])))
+      - console.log(note);
+      li.note(id: "note_" + JSON.parse(JSON.stringify(note["_id"])), style: "left:" + note.left + "px;top:" + note.top + "px")
         h3.title(contenteditable: "true")=note.title
         section.content(contenteditable: "true")=note.content
         section.actions

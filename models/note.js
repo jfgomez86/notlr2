@@ -1,7 +1,7 @@
 var mongoose = module.parent.parent.exports.mongoose;
 
 mongoose.model("Note", {
-  properties: ["title", "content", "updated_at"],
+  properties: ["title", "content", "top", "left", "updated_at"],
 
   methods: {
     save: function(fn){

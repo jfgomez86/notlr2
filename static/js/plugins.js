@@ -27,15 +27,22 @@
   });
 
   $("#new_note").click(function () {
-    var n = new Note("Edit Me!", "Edit this!");
+    var n = new Note("Edit Me!", "Edit this!", 100, 30);
     n.save();
   });
 
-  /*
-   *$(".note").draggable({
-   *  containment: "body"
-   *});
-   */
+  $(".note").draggable({
+    containment: "body",
+    stop: function (ev, ui) {
+      var noteId = $(this).attr("id").replace(/^note_/, "");
+      Note.update(noteId, {
+        left: ui.position.left,
+        top: ui.position.top
+      });
+    }
+  });
+  $(".title, content").click(function () { this.focus(); return false; });
+  $(".title, .content").blur(function () {  });
 
   var updateLocalRecords = (function (callback) {
     return setTimeout(function () {
@@ -81,15 +88,19 @@
   });
 
   // Note Model
-  var Note = this.Note = function (title, content) {
+  var Note = this.Note = function (title, content, top, left) {
     this.newRecord = true;
     this.title = title;
     this.content = content;
+    this.top = top;
+    this.left = left;
   };
 
   Note.prototype.properties = function () {
     return {
       title: this.title,
+      top: this.top,
+      left: this.left,
       content: this.content
     }
   };
@@ -97,7 +108,7 @@
   Note.prototype.save = function () {
     var self = this;
     if (this.newRecord) {
-      var note = $("<li class='note'>");
+      var note = $("<li class='note' style='left:" + this.left + "px; top:" + this.top + "px'>");
       note.append($("<h3 contenteditable='true' class='title'>")
       .html(self.properties().title));
       note.append($("<section contenteditable='true' class='content'>")

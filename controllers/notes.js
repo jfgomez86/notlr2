@@ -78,7 +78,7 @@ Notes.put("/:id", function (req, res) {
           note[attr] = req.param("note")[attr];
         }
         return arguments.callee;
-      })("title")("content");
+      })("title")("content")("top")("left");
       note.save(function () {
         res.send("ok");
       });

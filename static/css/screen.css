@@ -43,10 +43,11 @@ body { background-color: #2d7258; }
   list-style-type: none;
 }
 #notes .note {
+  position: absolute;
   margin: 8px 0 0 8px;
   width: 160px;
   background-color: #facc82;
-  cursor: normal;
+  cursor: default !important;
   border: 1px solid #deac37;
   border-radius: 8px;
   padding: 5px;
