@@ -26,6 +26,11 @@
     Note.del($(this).closest(".note").attr("id").replace(/^note_/, ""));
   });
 
+  $("#new_note").click(function () {
+    var n = new Note("Edit Me!", "Edit this!");
+    n.save();
+  });
+
   /*
    *$(".note").draggable({
    *  containment: "body"
@@ -107,6 +112,7 @@
           self.newRecord = false;
           note.attr("id", "note_" + data.id);
         });
+        $(document).scrollTo(note, {duration: 200});
       });
     }
   };
