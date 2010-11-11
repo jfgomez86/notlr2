@@ -26,6 +26,12 @@
     Note.del($(this).closest(".note").attr("id").replace(/^note_/, ""));
   });
 
+  /*
+   *$(".note").draggable({
+   *  containment: "body"
+   *});
+   */
+
   var updateLocalRecords = (function (callback) {
     return setTimeout(function () {
       var needUpdate = false, updatedNotes = {};

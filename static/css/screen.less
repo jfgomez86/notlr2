@@ -1,5 +1,7 @@
+@seeing_apparitions: #F2DEA2;
 @cupids_crush: #FACC82;
 @fully_embraced: #DEAC37;
+@forest_light: #8FC997;
 @forest_canopy: #52A35C;
 @giving_tree: #2D7258;
 @tail: #003853;
@@ -10,6 +12,44 @@
 
 body {
   background-color: @giving_tree;
+}
+
+.menu {
+  @menu_width: 70px;
+  ul { width: @menu_width; }
+  .item {
+    font-family: Delicious Italic;
+    font-size: 18px;
+    display: block;
+    position: relative;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 3px;
+    margin-top: 10px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: @tail;
+    color: @forest_light;
+    text-shadow: rgba(255,255,255,0.5) 0 1px 0;
+    left: -5px - @menu_width;
+    width: 100%;
+    -webkit-transition: left 0.1s ease-in-out;
+    -webkit-box-shadow: 2px 2px 8px @tail;
+    cursor: pointer;
+    z-index: 1000000;
+
+    :after {
+      text-align: right;
+      content: attr(data-icon);
+      display: block;
+      float: right;
+      margin-right: 6px;
+    }
+
+    :hover {
+      left: -30px;
+    }
+  }
 }
 
 #notes {
@@ -26,8 +66,9 @@ body {
     border-radius: 8px;
     padding: 5px;
     -webkit-box-shadow: 2px 2px 8px @tail;
-    -webkit-transition: -webkit-transform 0.2s ease-in-out;
-    background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.699219))), url(http://lab.simurai.com/css/buttons/noise.png);
+    -webkit-transition: -webkit-transform 0.1s ease-in-out,
+      background-color 0.1s ease-in-out;
+    background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.699219))), url(/images/noise.png);
 
     .title {
       padding: 5px;
@@ -53,15 +94,17 @@ body {
     }
 
     :hover {
-      -webkit-transform: rotate(-2deg);
+
+      background-color: @seeing_apparitions;
 
       .actions {
         opacity: 1;
       }
     }
-    :active {
-      -webkit-transform: rotate(-4deg);
-    }
+
+  }
+  .note.ui-draggable-dragging {
+    -webkit-transform: rotate(-4deg);
   }
 }
 
