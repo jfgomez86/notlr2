@@ -1,5 +1,16 @@
 // remap jQuery to $
 (function($) {
+  var draggableOptions = {
+    containment: "body",
+    handle: ".actions",
+    stop: function (ev, ui) {
+      var noteId = $(this).attr("id").replace(/^note_/, "");
+      Note.update(noteId, {
+        left: ui.position.left,
+        top: ui.position.top
+      });
+    }
+  };
 
   var ajaxErrorHandler = {
     422: function (xhr) {
@@ -27,21 +38,21 @@
   });
 
   $("#new_note").click(function () {
-    var n = new Note("Edit Me!", "Edit this!", 100, 30);
+    var n = new Note("Edit Me!", "Edit this!", 30, 100);
     n.save();
   });
 
-  $(".note").draggable({
-    containment: "body",
-    handle: ".actions",
-    stop: function (ev, ui) {
-      var noteId = $(this).attr("id").replace(/^note_/, "");
-      Note.update(noteId, {
-        left: ui.position.left,
-        top: ui.position.top
-      });
-    }
+  $(".note").dblclick(function (evt) {
+    evt.stopPropagation();
   });
+
+  $("body").dblclick(function (evt) {
+    var n = new Note("Edit Me!", "Edit this!", evt.offsetX, evt.offsetY);
+    n.save();
+    evt.preventDefault();
+  });
+
+  $(".note").draggable(draggableOptions);
 
   var updateLocalRecords = (function (callback) {
     return setTimeout(function () {
@@ -87,7 +98,7 @@
   });
 
   // Note Model
-  var Note = this.Note = function (title, content, top, left) {
+  var Note = this.Note = function (title, content, left, top) {
     this.newRecord = true;
     this.title = title;
     this.content = content;
@@ -123,6 +134,8 @@
           note.attr("id", "note_" + data.id);
         });
         $(document).scrollTo(note, {duration: 200});
+        note.draggable(draggableOptions);
+        note.dblclick(function (evt) { evt.stopPropagation() ; });
       });
     }
   };
