@@ -33,6 +33,7 @@
 
   $(".note").draggable({
     containment: "body",
+    handle: ".actions",
     stop: function (ev, ui) {
       var noteId = $(this).attr("id").replace(/^note_/, "");
       Note.update(noteId, {
@@ -41,8 +42,6 @@
       });
     }
   });
-  $(".title, content").click(function () { this.focus(); return false; });
-  $(".title, .content").blur(function () {  });
 
   var updateLocalRecords = (function (callback) {
     return setTimeout(function () {
