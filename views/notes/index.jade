@@ -2,12 +2,10 @@ nav.menu
   ul
     li.item#list_notes(data-icon: "✪") Home
     li.item#new_note(data-icon: "+") Add
-    li.item#list_notes(data-icon: "…") List
     li.item#list_notes(data-icon: "?") About
 ul#notes
   - if (notes.length > 0) {
     - each note in notes
-      - console.log(note);
       li.note(id: "note_" + JSON.parse(JSON.stringify(note["_id"])), style: "left:" + note.left + "px;top:" + note.top + "px")
         h3.title(contenteditable: "true")=note.title
         section.content(contenteditable: "true")=note.content

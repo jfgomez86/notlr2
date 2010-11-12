@@ -1,8 +1,10 @@
-/* Author:
+/* Author: Jose F. Gomez
 
  */
 
 $(document).ready(function() {
+  var onmessage = function (data) {
+  };
 
   io.setPath('/client/');
   socket = new io.Socket(null, {
@@ -10,14 +12,12 @@ $(document).ready(function() {
     ,transports: ['websocket', 'htmlfile', 'xhr-multipart', 'xhr-polling']
   });
   socket.connect();
-
-  $('#sender').bind('click', function() {
-    socket.send("Message Sent on " + new Date());
+  console.log("Connecting with synchronization server...");
+  socket.on('connect', function(data){
+    console.log("Successfully connected with synchronization server!");
   });
 
-  socket.on('message', function(data){
-    $('#reciever').append('<li>' + data + '</li>');
-  });
+  socket.on('message', onmessage);
 
 });
 
