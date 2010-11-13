@@ -1,5 +1,6 @@
 // remap jQuery to $
 (function($) {
+  // Setup//{{{
   var draggableOptions = {
     containment: "body",
     handle: ".actions",
@@ -11,6 +12,12 @@
       });
     }
   };
+
+  $(document).ajaxError(function (ev, xhr, ajaxOptions, err) {
+    if (ajaxErrorHandler.hasOwnProperty(xhr.status))
+    ajaxErrorHandler[xhr.status] (xhr);
+    else console.log(ev, xhr, ajaxOptions, err);
+  });
 
   var ajaxErrorHandler = {
     422: function (xhr) {
@@ -31,8 +38,10 @@
         }
       } else console.log(errors);
     }
-  };
+  };//}}}
 
+
+  //Event Bindings//{{{
   $(".note .delete").live("click", function () {
     Note.del($(this).closest(".note").attr("id").replace(/^note_/, ""));
   });
@@ -46,13 +55,51 @@
     evt.stopPropagation();
   });
 
-  $("body").dblclick(function (evt) {
-    var n = new Note("Edit Me!", "Edit this!", evt.offsetX, evt.offsetY);
+  $(document).dblclick(function (evt) {
+    var n = new Note("Edit Me!", "Edit this!", evt.pageX, evt.pageY);
     n.save();
     evt.preventDefault();
   });
 
+  $("#main").mousedown(function (evt) {
+    if (evt.button !== 0 || evt.target !== this) return;
+    evt.preventDefault();
+    var curx, cury
+    curx = evt.clientX;
+    cury = evt.clientY;
+
+    $(this).mousemove(function (ev) {
+      var dx, dy;
+      dx = curx - ev.clientX;
+      dy = cury - ev.clientY;
+
+      curx = ev.clientX;
+      cury = ev.clientY;
+
+      $("body").addClass("scrolling");
+      window.scrollBy(dx, dy);
+    });
+  });
+
+  $(document).mouseup(function (evt) {
+    $("body").removeClass("scrolling");
+    $("#main").unbind("mousemove");
+  });
+
   $(".note").draggable(draggableOptions);
+
+  $(window).load(function () {
+    $(window).resize(adjustSize);
+    adjustSize();
+
+    function adjustSize () {
+      $("#main").css({
+        height: $(document).height() - 10,
+        width: $(document).width() - 10
+      });
+    }
+  });
+
 
   var updateLocalRecords = (function (callback) {
     return setTimeout(function () {
@@ -89,15 +136,10 @@
         });
       });
     }, 1000);
-  });
+  });//}}}
 
-  $(document).ajaxError(function (ev, xhr, ajaxOptions, err) {
-    if (ajaxErrorHandler.hasOwnProperty(xhr.status))
-    ajaxErrorHandler[xhr.status] (xhr);
-    else console.log(ev, xhr, ajaxOptions, err);
-  });
 
-  // Note Model
+  // Note Model//{{{
   var Note = this.Note = function (title, content, left, top) {
     this.newRecord = true;
     this.title = title;
@@ -118,7 +160,50 @@
   Note.prototype.save = function () {
     var self = this;
     if (this.newRecord) {
-      var note = $("<li class='note' style='left:" + this.left + "px; top:" + this.top + "px'>");
+      $.post("/notes", { note: self.properties() }, function (data, textStatus, xhr) {
+        var ev = $.Event("Note.save");
+        self.id = data.id;
+        ev.note = self;
+        $(document).trigger(ev);
+        self.newRecord = false;
+      });
+    }
+  };
+
+  Note.del = function (id) {
+    var self = this;
+    $.post("/notes/" + id, {"_method": "delete"}, function (data, textStatus, xhr) {
+      if (/^ok$/.test(data)) {
+        var ev = $.Event("Note.del");
+        ev.noteId = id;
+        $(document).trigger(ev);
+        console.log(data);
+      }
+      else {
+        console.log(data, textStatus, xhr);
+      }
+    });
+  };
+
+  Note.update = function (id, attrs) {
+    attrs = {note: attrs, "_method": "put"};
+    $.post("/notes/" + id, attrs, function (data, textStatus, xhr) {
+      if (/^ok$/.test(data)) console.log(data);
+      else console.log(data, textStatus, xhr);
+    });
+  };//}}}
+
+
+  // Notes Controller//{{{
+  var NotesController = {
+    init: function () {
+      $(document).bind("Note.save", this.save);
+      $(document).bind("Note.del", this.del);
+    },
+
+    save: function (ev) {
+      var self = ev.note,
+      note = $("<li class='note' style='left:" + self.left + "px; top:" + self.top + "px'>");
       note.append($("<h3 contenteditable='true' class='title'>")
       .html(self.properties().title));
       note.append($("<section contenteditable='true' class='content'>")
@@ -129,45 +214,28 @@
       note.hide();
       $("#notes").append(note);
       note.fadeIn(300, function () {
-        $.post("/notes", { note: self.properties() }, function (data, textStatus, xhr) {
-          self.newRecord = false;
-          note.attr("id", "note_" + data.id);
-        });
         $(document).scrollTo(note, {duration: 200});
         note.draggable(draggableOptions);
         note.dblclick(function (evt) { evt.stopPropagation() ; });
       });
+      note.attr("id", "note_" + self.id);
+    },
+
+    del: function (ev) {
+      var id = ev.noteId;
+
+      $("#note_" + id).fadeOut(300, function () {
+        $("#note_" + id).remove();
+      });
     }
   };
-
-  Note.del = function (id) {
-    $("#note_" + id).fadeOut(300, function () {
-      $.post("/notes/" + id, {"_method": "delete"}, function (data, textStatus, xhr) {
-        if (/^ok$/.test(data)) {
-          $("#note_" + id).remove();
-          console.log(data);
-        }
-        else {
-          $("#note_" + id).show(300);
-          console.log(data, textStatus, xhr);
-        }
-      });
-    });
-  };
-
-  Note.update = function (id, attrs) {
-    attrs = {note: attrs, "_method": "put"};
-    $.post("/notes/" + id, attrs, function (data, textStatus, xhr) {
-      if (/^ok$/.test(data)) console.log(data);
-      else console.log(data, textStatus, xhr);
-    });
-  };
+  NotesController.init();//}}}
 
 })(window.jQuery);
 
 
 
-// usage: log('inside coolFunc',this,arguments);
+// usage: log('inside coolFunc',this,arguments);//{{{
 // paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
 window.log = function(){
   log.history = log.history || [];   // store logs to an array for reference
@@ -186,6 +254,6 @@ window.log = function(){
     log('document.write(): ',arguments);
     if (/docwriteregexwhitelist/.test(q)) write.apply(doc,arguments);
   };
-})(document);
+})(document);//}}}
 
-
+// vim: set foldmethod=marker:
