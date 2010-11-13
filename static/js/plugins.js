@@ -46,11 +46,6 @@
     Note.del($(this).closest(".note").attr("id").replace(/^note_/, ""));
   });
 
-  $("#new_note").click(function () {
-    var n = new Note("Edit Me!", "Edit this!", 30, 100);
-    n.save();
-  });
-
   $(".note").dblclick(function (evt) {
     evt.stopPropagation();
   });

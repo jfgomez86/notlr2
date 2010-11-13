@@ -16,36 +16,6 @@ body.scrolling { cursor: move; }
   min-height: 100%;
   min-width: 100%;
 }
-.menu ul { width: 70px; }
-.menu .item {
-  font-family: Delicious Italic;
-  font-size: 18px;
-  display: block;
-  position: relative;
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-bottom: 3px;
-  margin-top: 10px;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  background-color: #003853;
-  color: #8fc997;
-  text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0;
-  left: -75px;
-  width: 100%;
-  -webkit-transition: left 0.1s ease-in-out;
-  -webkit-box-shadow: 2px 2px 8px #003853;
-  cursor: pointer;
-  z-index: 1000000;
-}
-.menu .item:after {
-  text-align: right;
-  content: attr(data-icon);
-  display: block;
-  float: right;
-  margin-right: 6px;
-}
-.menu .item:hover { left: -30px; }
 #notes {
   margin: 0;
   padding: 0;
@@ -85,6 +55,9 @@ body.scrolling { cursor: move; }
   -webkit-transition: opacity 0.2s ease-in;
   cursor: move;
 }
-#notes .note:hover { background-color: #f2dea2; }
+#notes .note:hover {
+  background-color: #f2dea2;
+  z-index: 10000;
+}
 #notes .note:hover .actions { opacity: 1; }
 #notes .note.ui-draggable-dragging { -webkit-transform: rotate(-4deg); }
