@@ -10,7 +10,6 @@ html, body {
   width: 100%;
   height: 100%;
 }
-body { background: transparent url(/images/desert-texture.jpg); }
 body.scrolling { cursor: move; }
 #main {
   min-height: 100%;
@@ -26,10 +25,8 @@ header#page_header {
   position: fixed;
 }
 header#page_header a {
-  color: #eeeeee;
   text-decoration: none;
   text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0;
-  color: #003853;
 }
 header#page_header h1 {
   font-size: 1.9em;
@@ -51,7 +48,6 @@ header#page_header nav ul li a {
   padding-right: 20px;
   border-right: 1px solid rgba(255, 255, 255, 0.3);
 }
-header#page_header nav ul li a:hover { background-color: #facc82; }
 #notes {
   margin: 0;
   padding: 0;
@@ -62,24 +58,21 @@ header#page_header nav ul li a:hover { background-color: #facc82; }
   margin: 8px 0 0 8px;
   width: 160px;
   min-height: 120px;
-  background-color: #facc82;
   cursor: move;
-  border: 1px solid #deac37;
+  border: 1px solid rgba(200, 200, 200, 0.4);
   border-radius: 8px;
   -moz-border-radius: 8px;
   padding: 5px;
-  -webkit-box-shadow: 2px 2px 8px #000000;
+  -webkit-box-shadow: 2px 2px 8px black;
   -webkit-transition: -webkit-transform 0.1s ease-in-out, background-color 0.1s ease-in-out;
-  -moz-box-shadow: 2px 2px 8px #003853;
+  -moz-box-shadow: 2px 2px 8px black;
   -moz-transition: -moz-transform 0.2s ease-in-out, background-color 0.1s ease-in-out;
   background-image: -moz-radial-gradient(50% 0, circle cover, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0)), url(/images/noise.png);
   background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.699219))), url(/images/noise.png);
 }
 #notes .note .title {
   padding: 5px;
-  color: #003853;
   text-shadow: #888888 0 1px 2px;
-  border-bottom: 1px solid #deac37;
   font-size: 1.7em;
   font-family: Delicious Bold;
   cursor: default !important;
@@ -108,10 +101,7 @@ header#page_header nav ul li a:hover { background-color: #facc82; }
   color: #888888;
 }
 #notes .note .actions a:hover { opacity: 1; }
-#notes .note:hover {
-  background-color: #f2dea2;
-  z-index: 10000 !important;
-}
+#notes .note:hover { z-index: 10000 !important; }
 #notes .note:hover .actions { opacity: 1; }
 #notes .note.ui-draggable-dragging {
   -webkit-transform: rotate(-4deg);

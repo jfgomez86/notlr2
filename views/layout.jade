@@ -9,7 +9,14 @@ html(lang="en", class="no-js")
     link(rel="stylesheet", href="/css/style.css")
     link(rel="stylesheet",type="text/css",href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css")
     link(rel="stylesheet", href="/css/screen.css")
-
+    style(type="text/css")
+      | body { background: transparent url(/images/desert-texture.jpg); }
+      | #page_header a { color: #003853; }
+      | #page_header nav a:hover { background-color: #FACC82; }
+      | .note { background-color: #FACC82; }
+      | .note:hover { background-color: #F2DEA2; }
+      | .note h3.title { color: #003853 !important; border-bottom: 1px solid #DEAC37;}
+      | .note.content { color: #444444; }
   body
     header#page_header
       h1

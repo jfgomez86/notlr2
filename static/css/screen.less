@@ -5,6 +5,7 @@
 @forest_canopy: #52A35C;
 @giving_tree: #2D7258;
 @tail: #003853;
+@note_shadow: black;
 
 /* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
 @font-face { font-family: Delicious Italic; src: url('/fonts/Delicious-Italic.otf'); }
@@ -12,9 +13,6 @@
 
 html, body { width: 100% ; height: 100%; }
 
-body {
-  background: transparent url(/images/desert-texture.jpg);
-}
 body.scrolling { cursor: move; }
 
 #main { min-height: 100%; min-width: 100%; }
@@ -29,10 +27,8 @@ header#page_header {
   position: fixed;
 
   a {
-    color: #eee;
     text-decoration: none;
     text-shadow: rgba(255,255,255,.5) 0 1px 0;
-    color: @tail;
   }
 
   a:hover {
@@ -65,10 +61,6 @@ header#page_header {
           border-right: 1px solid rgba(255,255,255,0.3);
         }
 
-        a:hover {
-          background-color: @cupids_crush;
-        }
-
       }
     }
   }
@@ -84,16 +76,15 @@ header#page_header {
     margin: 8px 0 0 8px;
     width: 160px;
     min-height: 120px;
-    background-color: @cupids_crush;
     cursor: move;
-    border: 1px solid @fully_embraced;
+    border: 1px solid rgba(200,200,200,.4);
     border-radius: 8px;
     -moz-border-radius: 8px;
     padding: 5px;
-    -webkit-box-shadow: 2px 2px 8px #000;
+    -webkit-box-shadow: 2px 2px 8px @note_shadow;
     -webkit-transition: -webkit-transform 0.1s ease-in-out,
       background-color 0.1s ease-in-out;
-    -moz-box-shadow: 2px 2px 8px @tail;
+    -moz-box-shadow: 2px 2px 8px @note_shadow;
     -moz-transition: -moz-transform 0.2s ease-in-out,
       background-color 0.1s ease-in-out;
     background-image: -moz-radial-gradient(50% 0, circle cover, rgba(255, 255, 255, 0.55), rgba(255,255,255, 0)), url(/images/noise.png);
@@ -101,9 +92,7 @@ header#page_header {
 
     .title {
       padding: 5px;
-      color: @tail;
       text-shadow: #888 0 1px 2px;
-      border-bottom: 1px solid @fully_embraced;
       font-size: 1.7em;
       font-family: Delicious Bold;
       cursor: default !important;
@@ -141,7 +130,6 @@ header#page_header {
 
     :hover {
 
-      background-color: @seeing_apparitions;
       z-index: 10000 !important;
 
       .actions {
