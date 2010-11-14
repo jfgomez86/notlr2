@@ -16,6 +16,41 @@ body.scrolling { cursor: move; }
   min-height: 100%;
   min-width: 100%;
 }
+header#page_header {
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  width: 100%;
+  z-index: 999999;
+  position: fixed;
+}
+header#page_header a {
+  color: #eeeeee;
+  text-decoration: none;
+  text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0;
+  color: #003853;
+}
+header#page_header h1 {
+  font-size: 1.9em;
+  display: inline;
+  padding-left: 20px;
+  padding-top: 2px;
+  padding-bottom: 4px;
+  padding-right: 20px;
+  float: left;
+}
+header#page_header nav { float: right; }
+header#page_header nav ul li { display: inline; }
+header#page_header nav ul li a {
+  height: 24px;
+  float: left;
+  padding-top: 10px;
+  padding-bottom: 2px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+header#page_header nav ul li a:hover { background-color: #facc82; }
 #notes {
   margin: 0;
   padding: 0;
@@ -25,13 +60,18 @@ body.scrolling { cursor: move; }
   position: absolute;
   margin: 8px 0 0 8px;
   width: 160px;
+  min-height: 120px;
   background-color: #facc82;
-  cursor: default !important;
+  cursor: move;
   border: 1px solid #deac37;
   border-radius: 8px;
+  -moz-border-radius: 8px;
   padding: 5px;
   -webkit-box-shadow: 2px 2px 8px #003853;
   -webkit-transition: -webkit-transform 0.1s ease-in-out, background-color 0.1s ease-in-out;
+  -moz-box-shadow: 2px 2px 8px #003853;
+  -moz-transition: -moz-transform 0.2s ease-in-out, background-color 0.1s ease-in-out;
+  background-image: -moz-radial-gradient(50% 0, circle cover, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0)), url(/images/noise.png);
   background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0.699219))), url(/images/noise.png);
 }
 #notes .note .title {
@@ -41,23 +81,38 @@ body.scrolling { cursor: move; }
   border-bottom: 1px solid #deac37;
   font-size: 1.7em;
   font-family: Delicious Bold;
+  cursor: default !important;
 }
 #notes .note .content {
   text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0;
-  min-height: 80px;
   padding: 5px;
   font-family: Delicious Italic;
+  cursor: default !important;
 }
 #notes .note .actions {
   text-align: right;
   padding: 5px;
   opacity: 0;
   -webkit-transition: opacity 0.2s ease-in;
-  cursor: move;
+  position: absolute;
+  top: 2px;
+  right: 2px;
 }
+#notes .note .actions a {
+  text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0;
+  text-decoration: none;
+  font-family: Delicious Bold;
+  font-size: 1.8em;
+  opacity: 0.6;
+  color: #888888;
+}
+#notes .note .actions a:hover { opacity: 1; }
 #notes .note:hover {
   background-color: #f2dea2;
-  z-index: 10000;
+  z-index: 10000 !important;
 }
 #notes .note:hover .actions { opacity: 1; }
-#notes .note.ui-draggable-dragging { -webkit-transform: rotate(-4deg); }
+#notes .note.ui-draggable-dragging {
+  -webkit-transform: rotate(-4deg);
+  -moz-transform: rotate(-4deg);
+}

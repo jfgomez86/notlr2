@@ -2,8 +2,7 @@
 (function($) {
   // Setup//{{{
   var draggableOptions = {
-    containment: "body",
-    handle: ".actions",
+    containment: "#main",
     stop: function (ev, ui) {
       var noteId = $(this).attr("id").replace(/^note_/, "");
       Note.update(noteId, {
@@ -50,10 +49,18 @@
     evt.stopPropagation();
   });
 
+  $(".note .title, .note .content, .note .actions").mousedown(function (evt) {
+    // Prevents "drag" event to trigger. Makes contenteditable still work
+    evt.stopPropagation();
+  });
+
   $(document).dblclick(function (evt) {
-    var n = new Note("Edit Me!", "Edit this!", evt.pageX, evt.pageY);
-    n.save();
+    NotesController.createBlank(evt.pageX, evt.pageY);
     evt.preventDefault();
+  });
+
+  $("#add_note").click(function (evt) {
+    NotesController.createBlank(evt.pageX + 20, evt.pageY + 20);
   });
 
   $("#main").mousedown(function (evt) {
@@ -135,12 +142,13 @@
 
 
   // Note Model//{{{
-  var Note = this.Note = function (title, content, left, top) {
+  var Note = this.Note = function (attrs) {
+    attrs = attrs || {};
     this.newRecord = true;
-    this.title = title;
-    this.content = content;
-    this.top = top;
-    this.left = left;
+    this.title = attrs.title;
+    this.content = attrs.content;
+    this.top = attrs.top;
+    this.left = attrs.left;
   };
 
   Note.prototype.properties = function () {
@@ -204,14 +212,17 @@
       note.append($("<section contenteditable='true' class='content'>")
       .html(self.properties().content));
       note.append($("<section class='actions'>")
-      .html("<a href='javascript:void(0)' class='delete'>Delete</a>"));
+      .html("<a href='javascript:void(0)' class='delete'>x</a>"));
 
       note.hide();
       $("#notes").append(note);
       note.fadeIn(300, function () {
         $(document).scrollTo(note, {duration: 200});
         note.draggable(draggableOptions);
-        note.dblclick(function (evt) { evt.stopPropagation() ; });
+        note.dblclick(function (evt) { evt.stopPropagation(); });
+        note.find(".title, .content").mousedown(function (evt) {
+          evt.stopPropagation();
+        });
       });
       note.attr("id", "note_" + self.id);
     },
@@ -222,7 +233,18 @@
       $("#note_" + id).fadeOut(300, function () {
         $("#note_" + id).remove();
       });
+    },
+
+    createBlank: function (x,y) {
+      var n = new Note({
+        title: "Edit Me!",
+        content: "Edit this!",
+        left: x,
+        top: y
+      });
+      n.save();
     }
+
   };
   NotesController.init();//}}}
 

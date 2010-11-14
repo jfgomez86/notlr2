@@ -11,6 +11,20 @@ html(lang="en", class="no-js")
     link(rel="stylesheet", href="/css/screen.css")
 
   body
+    header#page_header
+      h1
+        a(href: "#") notlr
+      nav
+        ul
+          li
+            a(href: "javascript:void(0)")#add_note Add Note
+          li
+            a(href: "javascript:void(0)")#settings Settings
+          li
+            a(href: "javascript:void(0)")#help Help
+          li
+            a(href: "/logout")#log_out Log out
+
     #main!=body
 
     script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js")

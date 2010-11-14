@@ -1,7 +1,8 @@
 var express = module.parent.exports.express
 ,   Notes   = module.exports = express.createServer()
 ,   Note    = require("models/note.js")
-,   path    = require("path");
+,   path    = require("path")
+,   NotesController;
 
 var template_path = path.join(__dirname, "../views/notes");
 
@@ -29,60 +30,68 @@ function getLayout() {
 }
 //}}}
 
-Notes.get("/", function (req, res) {
-  Note.find().all(function (notes) {
-    res.render("index", {
-      locals: {
-        title: "Notes: List",
-        notes: notes
+NotesController = {
+  index: function (req, res) {
+    Note.find().all(function (notes) {
+      res.render("index", {
+        locals: {
+          title: "Notes: List",
+          notes: notes
+        }
+      });
+    });
+  },
+
+  create: function (req, res) {
+    var note = new Note(req.param("note"));
+    if (note.valid()) {
+      note.save(function () {
+        res.headers["Content-Type"] = "application/json";
+        res.send(JSON.stringify({id: note._id}));
+      });
+    } else {
+      res.headers["Content-Type"] = "application/json";
+      res.send(JSON.stringify({errors: note.errors}), 422);
+    }
+  },
+
+  update: function (req, res) {
+    Note.findById(req.param("id"), function (note) {
+      if (!note) {
+        res.headers["Content-Type"] = "application/json";
+        res.send(JSON.stringify({errors: "couldn't update note"}), 422);
+      } else {
+        (function (attr) {
+          if (req.param("note") && req.param("note").hasOwnProperty(attr)) {
+            note[attr] = req.param("note")[attr];
+          }
+          return arguments.callee;
+        })("title")("content")("top")("left");
+        note.save(function () {
+          res.send("ok");
+        });
       }
     });
-  });
-});
+  },
 
-Notes.post("/", function (req, res) {
-  var note = new Note(req.param("note"));
-  if (note.valid()) {
-    note.save(function () {
-      res.headers["Content-Type"] = "application/json";
-      res.send(JSON.stringify({id: note._id}));
+  del: function (req, res) {
+    Note.findById(req.param("id"), function (note) {
+      if (!note) {
+        res.headers["Content-Type"] = "application/json";
+        res.send(JSON.stringify({errors: "couldn't delete note"}), 422);
+      } else {
+        note.remove(function () {
+          res.send("ok");
+          res.end();
+        });
+      }
     });
-  } else {
-    res.headers["Content-Type"] = "application/json";
-    res.send(JSON.stringify({errors: note.errors}), 422);
   }
-});
+};
 
-Notes.del("/:id", function (req, res) {
-  Note.findById(req.param("id"), function (note) {
-    if (!note) {
-      res.headers["Content-Type"] = "application/json";
-      res.send(JSON.stringify({errors: "couldn't delete note"}), 422);
-    } else {
-      note.remove(function () {
-        res.send("ok");
-        res.end();
-      });
-    }
-  });
-});
+Notes.get("/", NotesController.index);
+Notes.post("/", NotesController.create);
+Notes.del("/:id", NotesController.del);
+Notes.put("/:id", NotesController.update);
 
-Notes.put("/:id", function (req, res) {
-  Note.findById(req.param("id"), function (note) {
-    if (!note) {
-      res.headers["Content-Type"] = "application/json";
-      res.send(JSON.stringify({errors: "couldn't update note"}), 422);
-    } else {
-      (function (attr) {
-        if (req.param("note") && req.param("note").hasOwnProperty(attr)) {
-          note[attr] = req.param("note")[attr];
-        }
-        return arguments.callee;
-      })("title")("content")("top")("left");
-      note.save(function () {
-        res.send("ok");
-      });
-    }
-  });
-});
 // vim: set foldmethod=marker:
