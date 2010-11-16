@@ -163,7 +163,7 @@
   Note.prototype.save = function () {
     var self = this;
     if (this.newRecord) {
-      $.post("/notes", { note: self.properties() }, function (data, textStatus, xhr) {
+      $.post("/", { note: self.properties() }, function (data, textStatus, xhr) {
         var ev = $.Event("Note.save");
         self.id = data.id;
         ev.note = self;
@@ -175,7 +175,7 @@
 
   Note.del = function (id) {
     var self = this;
-    $.post("/notes/" + id, {"_method": "delete"}, function (data, textStatus, xhr) {
+    $.post("/" + id, {"_method": "delete"}, function (data, textStatus, xhr) {
       if (/^ok$/.test(data)) {
         var ev = $.Event("Note.del");
         ev.noteId = id;
@@ -190,7 +190,7 @@
 
   Note.update = function (id, attrs) {
     attrs = {note: attrs, "_method": "put"};
-    $.post("/notes/" + id, attrs, function (data, textStatus, xhr) {
+    $.post("/" + id, attrs, function (data, textStatus, xhr) {
       if (/^ok$/.test(data)) console.log(data);
       else console.log(data, textStatus, xhr);
     });
