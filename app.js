@@ -22,7 +22,7 @@ app.configure(function(){
   app.use(express.bodyDecoder());
   app.use(express.staticProvider(__dirname + '/static'));
   app.use(express.compiler({ src: __dirname + '/static', enable: ['less'] }));
-  app.use("/notes", require("controllers/notes"));
+  app.use("/", require("controllers/notes"));
   app.use(app.router);
 });//}}}
 
