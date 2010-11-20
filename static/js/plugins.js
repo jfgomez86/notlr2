@@ -14,7 +14,7 @@
 
   $(document).ajaxError(function (ev, xhr, ajaxOptions, err) {
     if (ajaxErrorHandler.hasOwnProperty(xhr.status))
-    ajaxErrorHandler[xhr.status] (xhr);
+      ajaxErrorHandler[xhr.status] (xhr);
     else console.log(ev, xhr, ajaxOptions, err);
   });
 
@@ -207,12 +207,9 @@
     save: function (ev) {
       var self = ev.note,
       note = $("<li class='note' style='left:" + self.left + "px; top:" + self.top + "px'>");
-      note.append($("<h3 contenteditable='true' class='title'>")
-      .html(self.properties().title));
-      note.append($("<section contenteditable='true' class='content'>")
-      .html(self.properties().content));
-      note.append($("<section class='actions'>")
-      .html("<a href='javascript:void(0)' class='delete'>x</a>"));
+      note.append($("<h3 contenteditable='true' class='title'>").html(self.properties().title));
+      note.append($("<section contenteditable='true' class='content'>").html(self.properties().content));
+      note.append($("<section class='actions'>").html("<a href='javascript:void(0)' class='delete'>x</a>"));
 
       note.hide();
       $("#notes").append(note);
